@@ -14,7 +14,7 @@ int main()
 {
     auto fileStream = std::make_shared<ostream>();
     // Open stream to output file.
-	auto requestTask = fstream::open_ostream("users.ubx")
+	auto requestTask = fstream::open_ostream("token.ubx")
     .then([=](ostream outFile) {
         *fileStream = outFile;
         http_client client("http://online-live1.services.u-blox.com");
@@ -36,16 +36,22 @@ int main()
             response.body().read_to_end(fileStream->streambuf()).wait();
  
             // Close the file.
-            return fileStream->close();
+            fileStream->close();
         });
+        jv.then([=](){
+                std::cout << "Done reading file!" << std::endl;
+            });
+
+        // Wait until json value is ready
+        try {
+            jv.wait();
+        }
+        catch (const std::exception & e) {
+            printf("Error exception:%s\n", e.what());
+        }
     });
 
-    requestTask.then([=](){
-        std::cout << "Completed!" << std::endl;
-    });
-
-
-	// Wait until json value is ready
+    // Wait until json value is ready
 	try {
 		requestTask.wait();
 	}

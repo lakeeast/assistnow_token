@@ -33,3 +33,5 @@ main
 *.out
 *.app
 build
+*.ubx
+.DS_Store
