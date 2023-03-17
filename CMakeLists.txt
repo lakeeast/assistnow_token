@@ -7,11 +7,13 @@ if (APPLE)
     set(OPENSSL_SSL_LIBRARY ${OPENSSL_ROOT_DIR}/lib/libssl.a CACHE FILEPATH "" FORCE)
 endif()
 
+file(GLOB sources "*.cpp")
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2b")
 find_package(cpprestsdk REQUIRED)
 find_package(Boost COMPONENTS regex system filesystem REQUIRED)
 find_package(OpenSSL REQUIRED)
-add_executable(assistnow_token main.cpp)
+add_executable(assistnow_token ${sources})
 
 target_link_libraries(assistnow_token PRIVATE 
                             cpprestsdk::cpprest
